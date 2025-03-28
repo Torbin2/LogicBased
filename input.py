@@ -2,7 +2,7 @@ import pygame
 # import timeit
 
 
-def get_input(camera, previous_mouse, TILE_SIZE):
+def get_keyboard_input(camera, ):
     keys = pygame.key.get_pressed()
     
     if keys[pygame.K_w]:
@@ -21,11 +21,20 @@ def get_input(camera, previous_mouse, TILE_SIZE):
     
     if keys[pygame.K_SPACE]:
         camera = [0,0]
+
+    combo_keys = []
+    if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+        combo_keys.append("shift")
+    if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:
+        combo_keys.append("control")
     
+    return camera, combo_keys
+
+
+def get_mouse_input(previous_mouse, TILE_SIZE, camera):
 
     x = pygame.mouse.get_pos()
     mouse_pos = ((x[0] + camera[0]) // TILE_SIZE, (x[1] + camera[1])// TILE_SIZE)
-    print(mouse_pos)
 
     mouse = pygame.mouse.get_pressed()
     add = None
@@ -33,18 +42,10 @@ def get_input(camera, previous_mouse, TILE_SIZE):
         if mouse[0]:add = True      
         if mouse[2]:add = False
 
+    mouse_action : list[bool, tuple, tuple] = (add, mouse_pos, mouse) #add or remove, mouse_pos, buttons_pressed
+    return mouse_action
+    
+
+
     # print(timeit.timeit("import pygame;x = (pygame.mouse.get_pos()[0] - 10, pygame.mouse.get_pos()[1] + 10)"), "a")
     # print(timeit.timeit("import pygame;x = pygame.mouse.get_pos(); y= (x[0] -10, x[1] + 10)"), "b") #~0.07s faster
-
-    
-
-    mouse_action : list[bool, tuple, tuple] = (add, mouse_pos, mouse) #add or remove, mouse_pos, buttons_pressed
-    return camera, mouse_action
-    
-    # def select_crop(keys, selected, plants):
-    #     plant_keys = list(plants.keys())
-    #     for i in range(9):
-    #         key = getattr(pygame, f'K_{i}')  
-    #         if keys[key] and len(plant_keys) >= i:
-    #             selected = plant_keys[i - 1]  
-    #     return selected
