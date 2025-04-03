@@ -1,8 +1,10 @@
 import pygame
+
+from tiletypes import TileTypes
 # import timeit
 
 
-def get_keyboard_input(camera, ):
+def get_keyboard_input(camera, selected):
     keys = pygame.key.get_pressed()
     
     if keys[pygame.K_w]:
@@ -27,8 +29,14 @@ def get_keyboard_input(camera, ):
         combo_keys.append("shift")
     if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:
         combo_keys.append("control")
-    
-    return camera, combo_keys
+
+
+    for i in range(9):
+        key = getattr(pygame, f'K_{i}')  
+        if keys[key]:
+            selected = TileTypes(i)
+
+    return camera, combo_keys, selected
 
 
 def get_mouse_input(previous_mouse, TILE_SIZE, camera):

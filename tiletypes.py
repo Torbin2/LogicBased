@@ -1,12 +1,20 @@
-from enum import Enum, auto
+from enum import Enum
 
 class TileTypes(Enum):
-    WIRE = auto()
+    WIRE_G = 1
+    WIRE_B = 2
 
-    AND_GATE = auto()
-    OR_GATE = auto()
-    XOR_GATE = auto()
-    NOT_GATE = auto()
-    TRANSISTOR = auto()
+    AND_GATE = 3
+    OR_GATE = 4
+    XOR_GATE = 5
+    NOT_GATE = 6
+    TRANSISTOR = 7
 
-    SHIFT_TILE = auto()
+    BUTTON = 8
+    BRIDGE = 9
+
+    WIRES = [WIRE_B, WIRE_G]
+    LOGIC_GATES = [AND_GATE, OR_GATE, XOR_GATE, NOT_GATE, TRANSISTOR]
+    
+    #not usable
+    SHIFT_TILE = 11
