@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import IntEnum
 
-class TileTypes(Enum):
+class TileTypes(IntEnum):
     WIRE_G = 1
     WIRE_B = 2
 
@@ -13,8 +13,10 @@ class TileTypes(Enum):
     BUTTON = 8
     BRIDGE = 9
 
-    WIRES = [WIRE_B, WIRE_G]
-    LOGIC_GATES = [AND_GATE, OR_GATE, XOR_GATE, NOT_GATE, TRANSISTOR]
+    AAA = 0
+
+    # WIRES = [WIRE_B, WIRE_G]
+    # LOGIC_GATES = [AND_GATE, OR_GATE, XOR_GATE, NOT_GATE, TRANSISTOR]
     
     #not usable
     SHIFT_TILE = 11

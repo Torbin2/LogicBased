@@ -6,7 +6,9 @@ from wires import WireNetwork
 from tiletypes import TileTypes
 
 pygame.init()
-TEST = True
+TEST = False
+
+print("temp:\n 1/2 = wire, 8=button, 3-7 = logic_gate")
 
 class Game:
     def __init__(self) -> None:
@@ -42,10 +44,14 @@ class Game:
 
             self.wire_network.handle_input(self.mouse_action[0], self.mouse_action[1], combo_keys, self.selected)
 
+            self.wire_network.update()
+
             self.wire_network.render(self.camera)
 
             pygame.display.update()
             self.clock.tick(60)
+
+            
 
 
 Game().run()
