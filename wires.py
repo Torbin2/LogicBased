@@ -1,16 +1,18 @@
 from tiletypes import TileTypes
 import pygame
 
+
 OFFSETS = [(-1, 0), (0, -1), (1, 0), (0, 1)]
 
 class WireNetwork:
     def __init__(self, screen, tile_size) -> None:
         self.screen = screen
-        self.tile_size = tile_size
+        self.TILE_SIZE = tile_size
+        
         self.camera = [0, 0]
+        self.SCREEN_SIZE = (self.screen.get_width() // tile_size, self.screen.get_height() // tile_size)
 
         self.next_update = []
-        self.delete_list = []
 
         self.tilemap = {} #(type , state)
         #self.temp()
@@ -20,9 +22,14 @@ class WireNetwork:
 
 
     def render(self, camera):
-        self.camera = camera
 
+        self.camera = camera
+        on_screen_tiles = []
         for i in self.tilemap:
+            if -1 < i[0] - self.camera[0] // self.TILE_SIZE < self.SCREEN_SIZE[0]+ 1 and -1 < i[1]- self.camera[1]// self.TILE_SIZE < self.SCREEN_SIZE[1] + 1:
+                on_screen_tiles.append(i)
+
+        for i in on_screen_tiles:
             match self.tilemap[i][0]:
                 case TileTypes.WIRE_G | TileTypes.WIRE_B:
                     color = [0, 25, 200] if self.tilemap[i][0] == TileTypes.WIRE_B else [0, 200, 25]
@@ -41,10 +48,10 @@ class WireNetwork:
                     self.drawrect("purple", i)
 
     def drawrect(self, color, pos) -> pygame.Rect:
-        pygame.draw.rect(self.screen, color, pygame.Rect(pos[0] * self.tile_size - self.camera[0],
-                                                         pos[1] * self.tile_size - self.camera[1],
-                                                        self.tile_size, self.tile_size))
-    
+        pygame.draw.rect(self.screen, color, pygame.Rect(pos[0] * self.TILE_SIZE - self.camera[0],
+                                                         pos[1] * self.TILE_SIZE - self.camera[1],
+                                                        self.TILE_SIZE, self.TILE_SIZE))
+
     def temp(self):
         for i in range(10):
             self.tilemap[(0, i)] = (TileTypes.WIRE_G, 0)
@@ -82,9 +89,9 @@ class WireNetwork:
         elif add_tile == False: #add_tile can be None
             if mouse_pos in self.tilemap:
                 
-                self.tilemap[mouse_pos][1] = False
-                self.next_update.append(mouse_pos)
-                self.delete_list.append(mouse_pos)
+                self.tilemap.pop(mouse_pos)
+                for offset in OFFSETS:
+                    if (mouse_pos[0] + offset[0], mouse_pos[1] + offset[1]) in self.tilemap: self.next_update.append((mouse_pos[0] + offset[0], mouse_pos[1] + offset[1]))
        
     def update(self):
         next_tilemap = self.tilemap.copy()
@@ -117,9 +124,6 @@ class WireNetwork:
 
                 case _:
                     print(self.tilemap[i], "logic gate")
-        
-        for tile in self.delete_list: next_tilemap.pop(tile)
-        self.delete_list = []
         
         self.tilemap = next_tilemap
         
