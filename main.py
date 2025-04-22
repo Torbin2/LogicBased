@@ -13,9 +13,9 @@ print("temp: 1/2 = wire, 8=button, 3-7 = logic_gate")
 
 class Game:
     def __init__(self) -> None:
-        self.TILE_SIZE: int = 30
+        self.TILE_SIZE: int = 60
         
-        self.screen = pygame.display.set_mode((80 * self.TILE_SIZE, 60 * self.TILE_SIZE))
+        self.screen = pygame.display.set_mode((40 * self.TILE_SIZE, 30 * self.TILE_SIZE))
         
         
         self.wire_network = WireNetwork(self.screen, self.TILE_SIZE)
@@ -45,7 +45,7 @@ class Game:
 
             self.wire_network.render(self.camera)
             
-            print(self.clock.get_fps())
+            #print(self.clock.get_fps())
             pygame.display.update()
             self.clock.tick(60)
 

@@ -1,13 +1,15 @@
 from tiletypes import TileTypes
 import pygame
 
-
+from load_images import load_images
 OFFSETS = [(-1, 0), (0, -1), (1, 0), (0, 1)]
 
 class WireNetwork:
     def __init__(self, screen, tile_size) -> None:
         self.screen = screen
         self.TILE_SIZE = tile_size
+
+        self.IMAGES = load_images(tile_size)
         
         self.camera = [0, 0]
         self.SCREEN_SIZE = (self.screen.get_width() // tile_size, self.screen.get_height() // tile_size)
@@ -35,27 +37,27 @@ class WireNetwork:
                     color = [0, 25, 200] if self.tilemap[i][0] == TileTypes.WIRE_B else [0, 200, 25]
                     color[0] += 200 * self.tilemap[i][1]
                     self.drawrect(color, i)
-                
 
                 case TileTypes.BUTTON:
-                    color = "red" if self.tilemap[i][1] == 1 else "grey"
-                    self.drawrect(color, i)
+                    name = "button_on" if self.tilemap[i][1] == 1 else "button_off"
+                    self.render_gate(i, name)
                 
                 case TileTypes.SHIFT_TILE:
                     self.drawrect(self.tilemap[i][1], i)
                 
+                case TileTypes.BRIDGE:
+                    self.render_gate(i, "bridge")
+
                 case _ :
-                    self.drawrect("purple", i)
+                    self.render_gate(i, self.tilemap[i][0])
 
     def drawrect(self, color, pos) -> pygame.Rect:
         pygame.draw.rect(self.screen, color, pygame.Rect(pos[0] * self.TILE_SIZE - self.camera[0],
                                                          pos[1] * self.TILE_SIZE - self.camera[1],
                                                         self.TILE_SIZE, self.TILE_SIZE))
 
-    def temp(self):
-        for i in range(10):
-            self.tilemap[(0, i)] = (TileTypes.WIRE_G, 0)
-            self.tilemap[(i, 0)] = (TileTypes.WIRE_G, 0)
+    def render_gate(self, pos, gate_type:TileTypes | str):
+        self.screen.blit(self.IMAGES[gate_type], pygame.Rect(pos[0] * self.TILE_SIZE - self.camera[0], pos[1] * self.TILE_SIZE - self.camera[1], self.TILE_SIZE, self.TILE_SIZE))
 
     def handle_input(self, add_tile: bool, mouse_pos: tuple[int, int], combo_keys, selected : TileTypes):
         if add_tile:

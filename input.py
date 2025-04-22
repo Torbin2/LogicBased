@@ -33,7 +33,7 @@ def get_keyboard_input(camera, selected, time):
         combo_keys.append("control")
 
 
-    for i in range(9):
+    for i in range(10):
         key = getattr(pygame, f'K_{i}')  
         if keys[key]:
             selected = TileTypes(i)
