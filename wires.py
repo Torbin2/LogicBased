@@ -21,6 +21,7 @@ class WireNetwork:
 
         self.shift_connect = False
         self.WIRE_TYPES = (TileTypes.WIRE_B, TileTypes.WIRE_G)
+        self.WIRECOLORS = ["#267a1d", "#40cf31", "#274872", "#447ec7"]#GOff, GOn, BOff, BOn
 
 
     def render(self, camera):
@@ -34,9 +35,10 @@ class WireNetwork:
         for i in on_screen_tiles:
             match self.tilemap[i][0]:
                 case TileTypes.WIRE_G | TileTypes.WIRE_B:
-                    color = [0, 25, 200] if self.tilemap[i][0] == TileTypes.WIRE_B else [0, 200, 25]
-                    color[0] += 200 * self.tilemap[i][1]
-                    self.drawrect(color, i)
+                    color_num = 0
+                    if self.tilemap[i][0] == TileTypes.WIRE_B: color_num += 2 
+                    color_num += 1 * self.tilemap[i][1]
+                    self.drawrect(self.WIRECOLORS[color_num], i)
 
                 case TileTypes.BUTTON:
                     name = "button_on" if self.tilemap[i][1] == 1 else "button_off"
@@ -86,7 +88,9 @@ class WireNetwork:
                 if self.shift_connect: self.tilemap[self.shift_connect] = [TileTypes.WIRE_G, False]
                 
                 self.shift_connect = False
-                self.tilemap[mouse_pos] = [selected, False]
+
+                if selected in (TileTypes.WIRE_B, TileTypes.WIRE_G, TileTypes.BUTTON, TileTypes.BRIDGE): self.tilemap[mouse_pos] = [selected, False]
+                else: self.tilemap[mouse_pos] = [selected, False, 0] #type, state, rotation
         
         elif add_tile == False: #add_tile can be None
             if mouse_pos in self.tilemap:

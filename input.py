@@ -10,18 +10,18 @@ def get_keyboard_input(camera, selected, time):
     delta_time = time/ 16.67
 
     if keys[pygame.K_w]:
-        camera[1] -=20 * delta_time
+        camera[1] -=40 * delta_time
     if keys[pygame.K_a]:
-        camera[0] -=20 * delta_time
+        camera[0] -=40 * delta_time
     if keys[pygame.K_s]:
-        camera[1] +=20 * delta_time
+        camera[1] +=40 * delta_time
     if keys[pygame.K_d]:
-        camera[0] +=20 * delta_time
+        camera[0] +=40 * delta_time
 
     if keys[pygame.K_q]:
-        camera[0] -=50 * delta_time
+        camera[0] -=100 * delta_time
     if keys[pygame.K_e]:
-        camera[0] +=50 * delta_time
+        camera[0] +=100 * delta_time
     
     if keys[pygame.K_SPACE]:
         camera = [0,0]
